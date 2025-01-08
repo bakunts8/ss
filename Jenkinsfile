@@ -1,126 +1,92 @@
 pipeline {
     agent any
-    environment {
-        // GitHub credentials reference (replace 'github-token' with your actual credential ID)
-        GITHUB_CREDENTIALS = credentials('github-token')  // Reference GitHub PAT credentials
 
-        // Define server addresses for each environment (replace with actual servers)
-        DEV_SERVER = 'dev.example.com'
-        QA_SERVER = 'qa.example.com'
-        STAGING_SERVER = 'staging.example.com'
-        PROD_SERVER = 'prod.example.com'
+    environment {
+        // Define your environment variables here
+        JENKINS_URL = 'http://localhost:8080'
+        JENKINS_API_TOKEN = credentials('JENKINS_API_TOKEN') // use Jenkins credentials for API token
+        GITHUB_USER = 'admin' // Jenkins user to trigger build
+        JOB_NAME = 'my-jenkins-job' // Name of the Jenkins job to trigger
     }
 
     stages {
         stage('Checkout') {
             steps {
-                // Checkout code from GitHub using stored credentials
-                git url: 'https://github.com/your-username/your-repo.git', credentialsId: 'github-token'
+                // Checkout code from GitHub
+                checkout scm
             }
         }
 
-        stage('Run Health Tests') {
-            when {
-                branch 'feature/*'  // Trigger health tests on feature branches
-            }
+        stage('Build') {
             steps {
-                script {
-                    // Run health tests (TestNG tests in the "health" group)
-                    sh 'mvn test -Dtestng.groups=health'
-                }
-            }
-            post {
-                success {
-                    echo 'Health tests passed!'
-                }
-                failure {
-                    error 'Health tests failed, stopping the pipeline.'
-                }
+                echo 'Building the application...'
+                // Add build steps here, for example:
+                // sh './mvnw clean install'
             }
         }
 
-        stage('Run Smoke Tests') {
-            when {
-                anyOf {
-                    branch 'qa'
-                    branch 'staging'
-                    branch 'production'
-                }
-            }
+        stage('Run Tests') {
             steps {
-                script {
-                    // Run smoke tests (TestNG tests in the "smoke" group)
-                    sh 'mvn test -Dtestng.groups=smoke'
-                }
-            }
-            post {
-                success {
-                    echo 'Smoke tests passed!'
-                }
-                failure {
-                    error 'Smoke tests failed, stopping the pipeline.'
-                }
+                echo 'Running tests...'
+                // Run your tests here (for example with Maven or Gradle):
+                // sh './mvnw test'
             }
         }
 
-        stage('Deploy to Dev') {
-            when {
-                branch 'dev'  // Deploy only on dev branch (without smoke tests)
-            }
+        stage('Trigger Another Jenkins Job') {
             steps {
                 script {
-                    echo "Deploying to Dev environment..."
-                    // Deploy to Dev environment
-                    sh "deploy_to_dev.sh --server ${DEV_SERVER}"
+                    echo 'Triggering another Jenkins job...'
+                    // Trigger another Jenkins job using its API (or any other job)
+                    sh """
+                        curl -X POST "${JENKINS_URL}/job/${JOB_NAME}/build" \
+                            --user ${GITHUB_USER}:${JENKINS_API_TOKEN} \
+                            --header "Content-Type: application/json"
+                    """
                 }
             }
         }
 
         stage('Deploy to QA') {
             when {
-                branch 'qa'
+                branch 'main' // Only deploy if we are on the main branch
             }
             steps {
-                script {
-                    echo "Deploying to QA environment..."
-                    // Deploy to QA environment
-                    sh "deploy_to_qa.sh --server ${QA_SERVER}"
-                }
+                echo 'Deploying to QA environment...'
+                // Deploy to QA (you can add your deploy script here)
+                // sh './deploy_to_qa.sh'
             }
         }
 
         stage('Deploy to Staging') {
             when {
-                branch 'staging'
+                branch 'staging' // Only deploy if we are on the staging branch
             }
             steps {
-                script {
-                    echo "Deploying to Staging environment..."
-                    // Deploy to Staging environment
-                    sh "deploy_to_staging.sh --server ${STAGING_SERVER}"
-                }
+                echo 'Deploying to Staging environment...'
+                // Deploy to Staging (you can add your deploy script here)
+                // sh './deploy_to_staging.sh'
             }
         }
 
         stage('Deploy to Production') {
             when {
-                branch 'production'
+                branch 'production' // Only deploy if we are on the production branch
             }
             steps {
-                script {
-                    echo "Deploying to Production environment..."
-                    // Deploy to Production environment
-                    sh "deploy_to_prod.sh --server ${PROD_SERVER}"
-                }
+                echo 'Deploying to Production environment...'
+                // Deploy to Production (you can add your deploy script here)
+                // sh './deploy_to_production.sh'
             }
         }
     }
 
     post {
-        always {
-            // Always publish the test results and allure reports
-            junit '**/target/test-*.xml'  // JUnit test results
-            allure includeProperties: true, results: [[path: '**/allure-results']]  // Allure report
+        success {
+            echo 'Build and deployment were successful!'
+        }
+        failure {
+            echo 'Build or deployment failed!'
         }
     }
 }
