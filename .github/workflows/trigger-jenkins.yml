@@ -1,0 +1,18 @@
+name: Trigger Jenkins Build
+
+on:
+  push:
+    branches:
+      - main           # Trigger on main branch push
+      - 'feature/*'    # Trigger on feature branch pushes
+
+jobs:
+  trigger_jenkins:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Jenkins Build
+        run: |
+          curl -X POST "http://localhost:8080/job/my-jenkins-job/build" \
+          --user admin:${{ secrets.JENKINS_API_TOKEN }} \
+          --header "Content-Type: application/json"
+

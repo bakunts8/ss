@@ -1,6 +1,5 @@
 package org.example.components;
 
-import com.codeborne.selenide.SelenideElement;
 import lombok.Getter;
 import lombok.Setter;
 

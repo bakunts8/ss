@@ -5,6 +5,7 @@ import org.example.pages.HomePage;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+@Test(groups = "smoke")
 public class LoginPageTest extends TestBase {
 
     @Test
