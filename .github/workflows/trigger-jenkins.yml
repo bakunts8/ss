@@ -3,16 +3,25 @@ name: Trigger Jenkins Build
 on:
   push:
     branches:
-      - main           # Trigger on main branch push
-      - 'feature/*'    # Trigger on feature branch pushes
+      - main
+      - 'feature/*'
 
 jobs:
   trigger_jenkins:
     runs-on: ubuntu-latest
     steps:
+      - name: Check out the repository
+        uses: actions/checkout@v2
+
+      - name: Print environment variables
+        run: |
+          echo "GitHub Actions is triggered"
+          echo "GITHUB_REF: $GITHUB_REF"
+          echo "JENKINS_URL: ${{ secrets.JENKINS_URL }}"
+          echo "JENKINS_API_TOKEN: ${{ secrets.JENKINS_API_TOKEN }}"
+
       - name: Trigger Jenkins Build
         run: |
           curl -X POST "http://localhost:8080/job/my-jenkins-job/build" \
-          --user admin:${{ secrets.JENKINS_API_TOKEN }} \
-          --header "Content-Type: application/json"
-
+            --user admin:${{ secrets.JENKINS_API_TOKEN }} \
+            --header "Content-Type: application/json"
