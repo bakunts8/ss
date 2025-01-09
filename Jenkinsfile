@@ -33,20 +33,6 @@ pipeline {
             }
         }
 
-        stage('Trigger Another Jenkins Job') {
-            steps {
-                script {
-                    echo 'Triggering another Jenkins job...'
-                    // Trigger another Jenkins job using its API (or any other job)
-                    sh """
-                        curl -X POST "${JENKINS_URL}/job/${JOB_NAME}/build" \
-                            --user ${GITHUB_USER}:${JENKINS_API_TOKEN} \
-                            --header "Content-Type: application/json"
-                    """
-                }
-            }
-        }
-
         stage('Deploy to QA') {
             when {
                 branch 'main' // Only deploy if we are on the main branch
