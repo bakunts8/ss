@@ -27,7 +27,7 @@ pipeline {
                             sh './mvnw clean install'
                     } else {
                         echo 'Running on a Windows system'
-                        bat 'mvnw.cmd clean install
+                        bat 'mvnw.cmd clean install'
 '
                     }
                 }
