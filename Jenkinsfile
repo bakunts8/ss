@@ -28,10 +28,10 @@ pipeline {
                 script {
                     if (isUnix()) {
                         echo 'Running on a Unix system'
-                            sh './mvnw clean install'
+                        sh './mvnw clean install'
                     } else {
                         echo 'Running on a Windows system'
-                        bat 'mvnw.cmd clean install'
+                        bat './mvnw clean install'
                     }
                 }
             }
