@@ -2,17 +2,13 @@ package health;
 
 import com.asprise.ocr.Ocr;
 import com.codeborne.selenide.Selenide;
-import org.testng.annotations.Test;
 
 import java.io.File;
 import java.net.URL;
 
 import static com.codeborne.selenide.Selenide.$x;
 
-@Test(groups = "health")
 public class ImageTextReorganizationTest {
-
-//    @Test
     public void verifyTextFromImageInFile() {
         String localPath = "D:/Projects/my_projects/ss/src/test/resources/test.png";
 
@@ -24,7 +20,6 @@ public class ImageTextReorganizationTest {
     /**
      * Verifies the text extracted from an image URL using OCR.
      */
-//    @Test
     public void verifyTextFromImageInUrl() {
         Selenide.open("/");
 

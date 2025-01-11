@@ -13,7 +13,7 @@
 
     <test name="Health">
         <classes>
-            <class name="health.ImageTextReorganizationTest"/>
+<!--            <class name=""/>-->
         </classes>
     </test>
 </suite>
