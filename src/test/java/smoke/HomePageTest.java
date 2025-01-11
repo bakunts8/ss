@@ -11,7 +11,7 @@ public class HomePageTest extends TestBase {
     @Test
     public void verifyProducts() {
         int productsSize = new HomePage().getProducts().size();
-
+        System.out.println("the test is executed...");
         Assert.assertEquals(HomePage.PRODUCTS_SIZE, productsSize);
     }
 }
