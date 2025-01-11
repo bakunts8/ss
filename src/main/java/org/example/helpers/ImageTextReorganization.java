@@ -12,7 +12,6 @@ public class ImageTextReorganization {
     public void verifyTextFromImageInFile() {
         String localPath = "D:/Projects/my_projects/ss/src/test/resources/test.png";
 
-        // Perform OCR on the image file
         String text = extractTextFromSource(new File(localPath), null);
         System.out.println("Text from file: " + text);
     }
@@ -23,7 +22,6 @@ public class ImageTextReorganization {
     public void verifyTextFromImageInUrl() {
         Selenide.open("/");
 
-        // Extract the URL of the image from the web page
         String urlPath = $x("//div[@class='a-box']//img").attr("src");
         if (urlPath == null || urlPath.isEmpty()) {
             throw new RuntimeException("Image URL not found on the page.");
@@ -32,7 +30,6 @@ public class ImageTextReorganization {
         try {
             URL imageUrl = new URL(urlPath);
 
-            // Perform OCR on the image URL
             String text = extractTextFromSource(null, imageUrl);
             System.out.println("Text from URL: " + text);
         } catch (Exception e) {
