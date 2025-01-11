@@ -11,7 +11,7 @@ public class LoginPageTest extends TestBase {
     @Test
     public void verifyLogin() {
         String title = new HomePage().getTitle();
-        System.out.println("the test is executed........");
+
         Assert.assertEquals(title, "Products");
     }
 }
