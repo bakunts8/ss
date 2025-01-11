@@ -21,7 +21,11 @@ pipeline {
             steps {
                 echo 'Building the application...'
                 // Add build steps here, for example:
-                sh './mvnw clean install'
+                if (isUnix()) {
+                    sh './mvnw clean install'
+                } else {
+                    bat './mvnw clean install'
+                }
             }
         }
 
