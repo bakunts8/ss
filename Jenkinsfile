@@ -9,6 +9,10 @@ pipeline {
         JOB_NAME = 'my-jenkins-job' // Name of the Jenkins job to trigger
     }
 
+    tools {
+        maven 'Maven'
+    }
+
     stages {
         stage('Checkout') {
             steps {
