@@ -28,7 +28,6 @@ pipeline {
                     } else {
                         echo 'Running on a Windows system'
                         bat 'mvnw.cmd clean install'
-'
                     }
                 }
             }
