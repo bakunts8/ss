@@ -1,4 +1,4 @@
-package health;
+package org.example.helpers;
 
 import com.asprise.ocr.Ocr;
 import com.codeborne.selenide.Selenide;
@@ -8,7 +8,7 @@ import java.net.URL;
 
 import static com.codeborne.selenide.Selenide.$x;
 
-public class ImageTextReorganizationTest {
+public class ImageTextReorganization {
     public void verifyTextFromImageInFile() {
         String localPath = "D:/Projects/my_projects/ss/src/test/resources/test.png";
 
